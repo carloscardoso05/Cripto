@@ -59,8 +59,10 @@ def decifrar(texto_cifrado: str, chave: str) -> str:
 
     cipher = AES.new(chave, AES.MODE_CBC, iv)
 
-    texto_decriptado = unpad(cipher.decrypt(
-        texto_encriptado[AES.block_size:]), AES.block_size)
+    try:
+        texto_decriptado = unpad(cipher.decrypt(texto_encriptado[AES.block_size:]), AES.block_size)
+    except:
+        raise ValueError("Chave incorreta")
 
     texto_decodificado = texto_decriptado.decode('latin-1')
 
