@@ -17,6 +17,7 @@ def main(page: ft.Page):
     }
 
     page.title = "CriptoText"
+    page.scroll = ft.ScrollMode.ALWAYS
     page.padding = 20
     page.theme = ft.Theme(color_scheme=ft.ColorScheme(primary=ft.colors.TEAL))
     page.bgcolor = ft.colors.TEAL_100
