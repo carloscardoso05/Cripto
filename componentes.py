@@ -29,49 +29,51 @@ def BotaoSelecionarArquivos(page: ft.Page, on_selected=None, extensoes_permitida
 
 
 def AppBar():
+    modoCifrar = True
     titulo = ft.Text(
         "CriptoText",
         size=64,
         text_align="start",
         font_family="MuseoModerno",
-        color="#87E178",
+        color=ft.colors.TEAL,
         weight=ft.FontWeight.BOLD,
         italic=True,
     )
 
-    def BotaoCifrar():
-        return ft.ElevatedButton(
+    botaoCifrar = ft.ElevatedButton(
             content = ft.Text("Cifrar", font_family="Baumans", size=25),
             height=50,
             width=165,
-            style=ft.ButtonStyle(
-                color=ft.colors.BLACK,
-                bgcolor="#85C7B3",
-                shadow_color=ft.colors.BLACK12,
-            ),
+            bgcolor=ft.colors.TEAL_100,
+            data = True
         )
 
-    def BotaoDecifrar():
-        return ft.ElevatedButton(
+    botaoDecifrar = ft.ElevatedButton(
             content = ft.Text("Decifrar", font_family="Baumans", size=25),
             height=50,
             width=165,
-            style=ft.ButtonStyle(
-                color="#797373",
-                bgcolor=ft.colors.TRANSPARENT,
-                shadow_color=ft.colors.BLACK12,
-            )
+            bgcolor=ft.colors.TRANSPARENT,
+            data = False
         )
+    
+    def mudarModo(e: ft.ControlEvent):
+        nonlocal modoCifrar
+        modoCifrar = e.control.data
+        botaoCifrar.bgcolor = ft.colors.TEAL_100 if modoCifrar else ft.colors.TRANSPARENT
+        botaoDecifrar.bgcolor = ft.colors.TEAL_100 if not modoCifrar else ft.colors.TRANSPARENT
+        e.page.update()
+
+    botaoCifrar.on_click=mudarModo
+    botaoDecifrar.on_click=mudarModo
 
     return ft.AppBar(
         title=titulo,
         center_title=False,
         toolbar_height=160,
-        bgcolor='#F4F4F4',
         actions=[
                 ft.Container(
                     ft.Row(
-                        [BotaoCifrar(), BotaoDecifrar()],
+                        [botaoCifrar, botaoDecifrar],
                         alignment=ft.MainAxisAlignment.SPACE_AROUND,
                     ),
                     bgcolor="#D9D9D9",
