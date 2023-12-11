@@ -6,7 +6,11 @@ class MenuCifrarDecifrar(ft.UserControl):
         self.frase_senha = ""
         self.mensagem = ""
         self.modo_cifrar = True
-        self.botao_texto = ft.Text("Cifrar",font_family="Baumans") 
+        self.texto_botao = "Cifrar"
+        self.acao_cifrar = lambda x: print('cifrar')
+        self.acao_decifrar = lambda x: print('decifrar')
+        self.botao_ref = ft.Ref[ft.ElevatedButton]()
+        self.texto_botao_ref = ft.Ref[ft.Text]()
 
         def set_frase_senha(e: ft.ControlEvent):
             self.frase_senha = e.control.value
@@ -55,7 +59,8 @@ class MenuCifrarDecifrar(ft.UserControl):
         
     def set_modo_cifrar(self, modo_cifrar: bool):
         self.modo_cifrar = modo_cifrar
-        self.botao_texto.value = "Cifrar" if self.modo_cifrar else "Decifrar"
+        self.texto_botao_ref.current.value = "Cifrar" if self.modo_cifrar else "Decifrar"
+        self.botao_ref.current.on_click = self.acao_cifrar if self.modo_cifrar else self.acao_decifrar
         self.update()
 
     def build(self) -> ft.Container:
@@ -70,10 +75,12 @@ class MenuCifrarDecifrar(ft.UserControl):
                         controls=[
                             ft.ElevatedButton(
                                 content=ft.Container(
-                                    self.botao_texto,
+                                    ft.Text("Cifrar", ref=self.texto_botao_ref),
                                     padding=ft.padding.symmetric(
-                                        vertical=10, horizontal=20)
-                                )
+                                        vertical=10, horizontal=20),
+                                ),
+                                ref = self.botao_ref,
+                                on_click=self.acao_cifrar
                             ),
                             ft.IconButton(icon=ft.icons.UPLOAD_FILE_OUTLINED)
                         ]
