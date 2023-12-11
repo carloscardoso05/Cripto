@@ -6,14 +6,14 @@ class MenuCifrarDecifrar(ft.UserControl):
     def acao_cifrar(self, e: ft.ControlEvent):
         chave = self.senha_input_ref.current.value
         texto = self.mensagem_input_ref.current.value
-        texto_criptografado = cp.cifrar(texto, chave)
+        texto_criptografado = cp.cifrar_mensagem(texto, chave)
         self.mensagem_input_ref.current.value = texto_criptografado
         self.update()
 
     def acao_decifrar(self, e: ft.ControlEvent):
         chave = self.senha_input_ref.current.value
         texto = self.mensagem_input_ref.current.value
-        texto_descriptografado = cp.decifrar(texto, chave)
+        texto_descriptografado = cp.decifrar_mensagem(texto, chave)
         self.mensagem_input_ref.current.value = texto_descriptografado
         self.update()
 
