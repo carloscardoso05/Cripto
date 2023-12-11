@@ -4,7 +4,7 @@ from MenuCifrarDecifrar import MenuCifrarDecifrar
 
 
 def main(page: ft.Page):
-    menuCifrarDecifrar = MenuCifrarDecifrar()
+    menuCifrarDecifrar = MenuCifrarDecifrar(page)
 
     def mudarModo(modo_cifrar):
         nonlocal menuCifrarDecifrar
