@@ -1,11 +1,11 @@
 import flet as ft
 
 class MenuCifrarDecifrar(ft.UserControl):
-    def __init__(self, frase_senha: str = "", mensagem: str = "", modo_cifrar: bool = True) -> None:
+    def __init__(self) -> None:
         super().__init__()
-        self.frase_senha = frase_senha
-        self.mensagem = mensagem
-        self.modo_cifrar = modo_cifrar
+        self.frase_senha = ""
+        self.mensagem = ""
+        self.modo_cifrar = True
         self.botao_texto = ft.Text("Cifrar",font_family="Baumans") 
 
         def set_frase_senha(e: ft.ControlEvent):
