@@ -61,9 +61,10 @@ class MenuCifrarDecifrar(ft.UserControl):
                     border_radius=ft.border_radius.all(20),
                     multiline=True,
                     min_lines=5,
+                    max_lines=5,
                     bgcolor=ft.colors.WHITE,
                     border_color=ft.colors.TEAL_900,
-                    focused_border_width=3,
+                    focused_border_width=3
                 )
             ]
         ),
