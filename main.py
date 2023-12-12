@@ -25,7 +25,5 @@ def main(page: ft.Page):
     page.add(menuCifrarDecifrar)
     page.update()
 
-        
-
 
 ft.app(target=main)
