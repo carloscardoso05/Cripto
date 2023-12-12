@@ -2,7 +2,6 @@ from Crypto.Cipher import AES
 from Crypto.Hash import SHA256
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad, unpad
-import re
 import os
 
 def criar_chave_256_bits(string: str, tamanho_bytes: int = 32) -> bytes:

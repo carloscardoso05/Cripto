@@ -1,6 +1,5 @@
 import flet as ft
 import criptografia as cp
-from componentes import BotaoSelecionarArquivos
 
 
 def InputMensagem(mensagem_input_ref: ft.Ref[ft.TextField]):
@@ -112,13 +111,15 @@ class MenuCifrarDecifrar(ft.UserControl):
         )
 
     def acao_arquivos(self, e):
-        arquivos = self.acao_cifrar_arquivos() if self.modo_cifrar else self.acao_decifrar_arquivos()
+        arquivos = self.acao_cifrar_arquivos(
+        ) if self.modo_cifrar else self.acao_decifrar_arquivos()
         acao = "cifrados" if self.modo_cifrar else "decifrados"
         self.page.snack_bar = ft.SnackBar(
             content=ft.Text(f"{len(arquivos)} arquivos foram {acao}")
         )
         self.arquivos = []
-        self.lista_arquivos_ref.current.controls = [ft.Text("Sem arquivos selecionados", color=ft.colors.BLACK)]
+        self.lista_arquivos_ref.current.controls = [
+            ft.Text("Sem arquivos selecionados", color=ft.colors.BLACK)]
         self.update()
         self.page.snack_bar.open = True
         self.page.update()
@@ -164,7 +165,8 @@ class MenuCifrarDecifrar(ft.UserControl):
                                 on_click=self.selecionar_arquivos
                             ),
                             ft.ElevatedButton(
-                                content=ft.Icon(ft.icons.ARROW_FORWARD_ROUNDED),
+                                content=ft.Icon(
+                                    ft.icons.ARROW_FORWARD_ROUNDED),
                                 on_click=self.acao_arquivos
                             ),
                         ]
