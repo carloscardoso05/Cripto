@@ -72,35 +72,38 @@ class MenuCifrarDecifrar(ft.UserControl):
         self.lista_arquivos_ref = ft.Ref[ft.ListView]()
 
         self.selecionar_arquivos_ref = ft.Ref[ft.FilePicker]()
-        self.janela_selecionar_arquivos = ft.FilePicker(ref=self.selecionar_arquivos_ref)
+        self.janela_selecionar_arquivos = ft.FilePicker(
+            ref=self.selecionar_arquivos_ref)
 
         def resultado_selecionar_arquivos(e: ft.FilePickerResultEvent):
-            self.arquivos = list(map(lambda f: f.path, e.files)) if e.files else []
-            self.lista_arquivos_ref.current.controls = [ft.Text("Sem arquivos selecionados", color=ft.colors.BLACK)] if not self.arquivos else [ft.Text(arquivo, color=ft.colors.BLACK) for arquivo in self.arquivos]
+            self.arquivos = list(
+                map(lambda f: f.path, e.files)) if e.files else []
+            self.lista_arquivos_ref.current.controls = [ft.Text("Sem arquivos selecionados", color=ft.colors.BLACK)] if not self.arquivos else [
+                ft.Text(arquivo, color=ft.colors.BLACK) for arquivo in self.arquivos]
             self.update()
 
-        self.selecionar_arquivos_ref.current.on_result=resultado_selecionar_arquivos
+        self.selecionar_arquivos_ref.current.on_result = resultado_selecionar_arquivos
         self.page.overlay.append(self.janela_selecionar_arquivos)
 
-    def acao_cifrar(self, e: ft.ControlEvent):
+    def acao_cifrar(self):
         chave = self.input_senha_ref.current.value
         texto = self.input_mensagem_ref.current.value
         texto_criptografado = cp.cifrar_mensagem(texto, chave)
         self.input_mensagem_ref.current.value = texto_criptografado
         self.update()
 
-    def acao_decifrar(self, e: ft.ControlEvent):
+    def acao_decifrar(self):
         chave = self.input_senha_ref.current.value
         texto = self.input_mensagem_ref.current.value
         texto_descriptografado = cp.decifrar_mensagem(texto, chave)
         self.input_mensagem_ref.current.value = texto_descriptografado
         self.update()
 
-    def acao_cifrar_arquivos(self, arquivos: list[str]):
-        return [cp.cifrar_arquivo(arquivo, self.frase_senha) for arquivo in arquivos]
+    def acao_cifrar_arquivos(self):
+        return [cp.cifrar_arquivo(arquivo, self.frase_senha) for arquivo in self.arquivos]
 
-    def acao_decifrar_arquivos(self, arquivos: list[str]):
-        return [cp.decifrar_arquivo(arquivo, self.frase_senha) for arquivo in arquivos]
+    def acao_decifrar_arquivos(self):
+        return [cp.decifrar_arquivo(arquivo, self.frase_senha) for arquivo in self.arquivos]
 
     def selecionar_arquivos(self, e: ft.ControlEvent):
         self.janela_selecionar_arquivos.pick_files(
@@ -108,17 +111,28 @@ class MenuCifrarDecifrar(ft.UserControl):
             allowed_extensions=None if self.modo_cifrar else ["cripto"],
         )
 
-    def acao_arquivos(self, e: ft.ControlEvent):
-        return self.acao_cifrar_arquivos(self.arquivos) if self.modo_cifrar else self.acao_decifrar_arquivos(self.arquivos)
+    def acao_arquivos(self, e):
+        arquivos = self.acao_cifrar_arquivos() if self.modo_cifrar else self.acao_decifrar_arquivos()
+        acao = "cifrados" if self.modo_cifrar else "decifrados"
+        self.page.snack_bar = ft.SnackBar(
+            content=ft.Text(f"{len(arquivos)} arquivos foram {acao}")
+        )
+        self.arquivos = []
+        self.lista_arquivos_ref.current.controls = [ft.Text("Sem arquivos selecionados", color=ft.colors.BLACK)]
+        self.update()
+        self.page.snack_bar.open = True
+        self.page.update()
 
     def set_modo_cifrar(self, modo_cifrar: bool):
         self.modo_cifrar = modo_cifrar
         self.texto_botao_ref.current.value = "Cifrar" if self.modo_cifrar else "Decifrar"
-        self.botao_ref.current.on_click = self.acao_cifrar if self.modo_cifrar else self.acao_decifrar
         self.arquivos = []
-        self.lista_arquivos_ref.current.controls = [ft.Text("Sem arquivos selecionados", color=ft.colors.BLACK)
-]
+        self.lista_arquivos_ref.current.controls = [
+            ft.Text("Sem arquivos selecionados", color=ft.colors.BLACK)]
         self.update()
+
+    def acao(self, e: ft.ControlEvent):
+        self.acao_cifrar() if self.modo_cifrar else self.acao_decifrar()
 
     def build(self) -> ft.Container:
         return ft.Container(
@@ -142,7 +156,7 @@ class MenuCifrarDecifrar(ft.UserControl):
                                     ),
                                 ),
                                 ref=self.botao_ref,
-                                on_click=self.acao_cifrar
+                                on_click=self.acao
                             ),
                             ft.ElevatedButton(
                                 content=ft.Icon(ft.icons.UPLOAD_FILE),
@@ -152,13 +166,14 @@ class MenuCifrarDecifrar(ft.UserControl):
                             ft.ElevatedButton(
                                 content=ft.Icon(ft.icons.ARROW_FORWARD_ROUNDED),
                                 on_click=self.acao_arquivos
-                            )
+                            ),
                         ]
                     ),
                     ft.ListView(
                         ref=self.lista_arquivos_ref,
                         controls=[
-                            ft.Text("Sem arquivos selecionados", color=ft.colors.BLACK)
+                            ft.Text("Sem arquivos selecionados",
+                                    color=ft.colors.BLACK)
                         ]
                     )
                 ]
